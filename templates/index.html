@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Welcome to Vue</title>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script src="https://unpkg.com/vue"></script>
+
+<style>
+.request {
+	margin: 2rem;
+	padding: 1rem;
+	background: #efefef;
+}
+
+.pre {
+	max-width: 100%;
+	overflow: scroll;
+}
+</style>
+	</head>
+	<body>
+		<div id="app">
+			<div v-for="request in requests.data" class="request">
+				<div class="time">
+					<h3>TIME:</h3>
+					<pre><% request.time%></pre>
+				<div class="header">
+					<h3>Header</h3>
+					<pre><% request.header %></pre>
+				</div>
+				<div class="Data">
+					<h3>Data</h3>
+					<pre><% request.data %></pre>
+				</div>
+				<div class="form">
+					<h3>Form</h3>
+					<pre><% request.form%></pre>
+				</div>
+			</div>
+			<br>
+		</div>
+
+		<script>
+			var app = new Vue({
+				delimiters: ["<%","%>"],
+				el: '#app',
+				data: {
+					requests: null,
+					timer: null,
+				},
+				created() {
+					this.getData();
+					this.timer = setInterval(this.getData, 1000)
+				},
+				methods: {
+					getData() {
+						axios.get('http://34.107.103.235/api/requests').then(response => (this.requests = response))
+					}
+				},
+				beforeDestroy() {
+					clearInterval(this.timer)
+				}
+			})
+		</script>
+	</body>
+</html>
